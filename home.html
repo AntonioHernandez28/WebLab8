@@ -34,6 +34,21 @@
 
   </div>
 
+  <script type="text/javascript">
+  function cargarVisitas(){
+    $.ajax({
+      url: 'api/contadorVisitas', 
+      success: function(data){
+        $("footer").append(
+          $("<p>").text(`Total de visitsas: ${data}`)
+        );
+      }
+    })
+  }
+
+  cargarVisitas(); 
+
+  </script>
 
 </body>
 </html>

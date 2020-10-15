@@ -84,6 +84,32 @@
 
 <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS SENT TO OUR SERVER -->
 <script type="text/javascript">
+$(".submit").on("click", function(event) {
+  event.preventDefault(); //Me quitó horas dejar que crasheara hasta que puse esto :(
+  var nuevaReservacion = {
+    customerName: $("#reserve-name").val().trim(),
+    customerEmail: $("#reserve-email").val().trim(),
+    customerID: $("#reserve-unique-id").val().trim(),
+    phoneNumber: $("#reserve-phone").val().trim()
+  }; 
+  $.post('/api/reserve', nuevaReservacion, function(data){
+    if(data) alert("Reservación exitosa"); 
+    else alert("Lo sentimos, estamos llenos. Ha sido movido a la lista de espera"); 
+  });
+}); 
 
+// Contador de visitas
+function cargarVisitas(){
+    $.ajax({
+      url: 'api/contadorVisitas', 
+      success: function(data){
+        $("footer").append(
+          $("<p>").text(`Total de visitsas: ${data}`)
+        );
+      }
+    })
+  }
+
+  cargarVisitas();
 
 </script>
