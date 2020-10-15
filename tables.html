@@ -70,8 +70,51 @@
 
 <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS LOADED FROM OUR SERVER -->
 <script type="text/javascript">
+function cargarReservaciones(ComeUrl, idContainer) {
+  $.ajax({
+    url: ComeUrl, 
+    success: function(data) {
+      var listaMesas = $(idContainer); 
+      for(var i = 0; i < data.lenth; i++){
+        var mesa = $('<li class="list-group-item">');
+          mesa.append(
+          $("<h2>").text(`Table #${i + 1}`),
+          $("<hr>"),
+          $("<h2>").text(`ID: ${data[i].customerID}`),
+          $("<h2>").text(`Name: ${data[i].customerName}`),
+          $("<h2>").text(`Email: ${data[i].customerEmail}`),
+          $("<h2>").text(`Phone: ${data[i].phoneNumber}`));
+        listaMesas.append(mesa);
+      }
+    }
+  }); 
+}
 
+$("#clear").on("click", function(event) {
+  event.preventDefault(); 
+  $.post('/api/clearReservations', function(data) {
+    if(data){ //Si se completó
+      $("#tableList").empty(); 
+      $("#waitList").empty(); 
+    }
+  }); 
+}); 
 
+function cargarVisitas(){
+    $.ajax({
+      url: 'api/contadorVisitas', 
+      success: function(data){
+        $("footer").append(
+          $("<p>").text(`Total de visitsas: ${data}`)
+        );
+      }
+    })
+  }
+
+  cargarVisitas();
+  cargarReservaciones('/api/tables', '#tableList'); 
+  cargarReservaciones('/api/waitList', '#waitList'); 
+  
 
 
 </script>
